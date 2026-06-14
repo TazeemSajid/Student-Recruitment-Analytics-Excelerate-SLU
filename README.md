@@ -219,8 +219,4 @@ FROM master_table_nonulls;
 
 ---
 
-## 👤 Author
-**Muhammad Tazeem Sajid**
-- 🔗 LinkedIn: `linkedin.com/in/muhammad-tazeem-sajid-2642622b1`
-- 💻 GitHub: `github.com/TazeemSajid`
-- 📧 Email: `tazeemsajid22@gmail.com`
+
