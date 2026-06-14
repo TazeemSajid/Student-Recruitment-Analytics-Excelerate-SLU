@@ -112,6 +112,9 @@ master_table_clean (51,108 rows | 29 columns)
 
 └── opportunity1     (187 rows) → opportunity_id, opportunity_name, category
 
+<img width="1536" height="1024" alt="Database Table Relationships and Keys Diagram" src="https://github.com/user-attachments/assets/98389fba-e1b7-480e-b18c-eadf65f86710" />
+
+
 ### Key Relationships
 | From | To | Join Key |
 |---|---|---|
@@ -185,10 +188,12 @@ FROM master_table_nonulls;
 ## 📈 Dashboard Screenshots
 
 ### Learner Analytics Dashboard
-![Learner Dashboard](visuals/learner_dashboard_screenshot.png)
+<img width="2434" height="1392" alt="Learner Enrollment" src="https://github.com/user-attachments/assets/8fb11597-dba5-4292-82d8-c8cb3630c4c1" />
+
 
 ### Marketing Campaign Dashboard
-![Marketing Dashboard](visuals/marketing_dashboard_screenshot.png)
+<img width="2290" height="1052" alt="Marketing Data" src="https://github.com/user-attachments/assets/721a0a70-8343-40dc-b7be-a688bd5fd9c6" />
+
 
 ---
 
@@ -209,17 +214,7 @@ FROM master_table_nonulls;
 
 ---
 
-## 📂 Data Access
-> ⚠️ Raw datasets not included due to privacy and size constraints.
-> This project was completed as part of the Excelerate × SLU internship program.
-> Data was provided by Excelerate for educational purposes only.
-
----
-
 ## 📄 Reports
-- Week 2: Data Transformation & Master Table Creation Report
-- Week 3: Dashboard Design & Wireframing Report
-
 > Reports available in the `reports/` folder
 
 ---
