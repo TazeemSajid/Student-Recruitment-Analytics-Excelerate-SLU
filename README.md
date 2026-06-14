@@ -85,13 +85,41 @@ The organization needed to:
 ## 🗄️ Data Model
 
 ### Datasets Used
-| Dataset | Records | Purpose |
-|---|---|---|
-| learneropp1 | 113,602 | Central enrollment table |
-| learner1 | 129,260 | Learner demographics |
-| cognito2 | 34,111 | User identity & contact |
-| cohort1 | — | Cohort program details |
-| opportunity1 | 374 | Course & opportunity info |
-| marketing1 | — | Campaign metrics |
+| Dataset | Description | Rows | Columns |
+|---|---|---|---|
+| User Data (learner1) | User profiles, sign-up info, education & location | 129,259 | 5 |
+| Opportunity Data (opportunity1) | Learning opportunities & program information | 187 | 5 |
+| Cohort Data (cohort1) | Cohorts, associated opportunities & timeframes | 639 | 5 |
+| Marketing Data (marketing1) | Campaign impressions, engagement & cost metrics | 148 | 13 |
+| Learner Opportunity (learneropp1) | Maps learners to opportunities & application metadata | 113,602 | 6 |
+| Cognito Data (cognito2) | Profile authentication, gender, city & timestamps | 13,318 | 5 |
 
-### Master Table
+---
+
+### Master Table Creation
+
+master_table_clean (51,108 rows | 29 columns)
+
+├── learneropp1  (113,602 rows) → enrollment_id, learner_id,
+
+│                                  assigned_cohort, apply_date, status
+
+├── learner1     (129,259 rows) → country, degree, institution, major
+
+├── cognito2      (13,318 rows) → email, gender, birthdate, city, state
+
+├── cohort1          (639 rows) → cohort_code, start_date, end_date, size
+
+└── opportunity1     (187 rows) → opportunity_id, opportunity_name, category
+
+### Key Relationships
+| From | To | Join Key |
+|---|---|---|
+| learneropp1.enrollment_id | learner1.learner_id | enrollment ↔ user |
+| learneropp1.enrollment_id | cognito2.user_id | enrollment ↔ profile |
+| learneropp1.assigned_cohort | cohort1.cohort_code | enrollment ↔ cohort |
+| learneropp1.learner_id | opportunity1.opportunity_id | enrollment ↔ program |
+
+> ⚠️ Note: marketing1 dataset was NOT joined into the master table
+> as it has no matching foreign keys. It was used separately
+> for marketing campaign visualization only.
