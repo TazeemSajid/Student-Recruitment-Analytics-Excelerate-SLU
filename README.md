@@ -123,3 +123,109 @@ master_table_clean (51,108 rows | 29 columns)
 > ⚠️ Note: marketing1 dataset was NOT joined into the master table
 > as it has no matching foreign keys. It was used separately
 > for marketing campaign visualization only.
+
+
+---
+
+## 🧹 ETL Pipeline Summary
+
+```sql
+-- Step 1: Create Raw Master Table
+CREATE TABLE master_table_raw AS
+SELECT lo.enrollment_id, lo.learner_id, lo.assigned_cohort,
+       lo.apply_date, lo.status, l.country, l.degree,
+       c.email, c.gender, c.birthdate,
+       co.cohort_code, co.start_date, co.end_date,
+       o.opportunity_name, o.category
+FROM learneropp1 lo
+LEFT JOIN learner1 l    ON lo.enrollment_id = l.learner_id
+LEFT JOIN cognito2 c    ON lo.enrollment_id = c.user_id
+LEFT JOIN cohort1 co    ON lo.assigned_cohort = co.cohort_code
+LEFT JOIN opportunity1 o ON lo.learner_id = o.opportunity_id;
+
+-- Step 2: Remove Duplicates
+CREATE TABLE master_table_noduplicates AS
+SELECT * FROM (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY enrollment_id ORDER BY enrollment_id
+    ) AS rn FROM master_table_raw
+) t WHERE rn = 1;
+
+-- Step 3: Remove Nulls in Critical Fields
+CREATE TABLE master_table_nonulls AS
+SELECT * FROM master_table_noduplicates
+WHERE enrollment_id IS NOT NULL
+  AND email IS NOT NULL
+  AND apply_date IS NOT NULL;
+
+-- Step 4: Fix Date Formats
+CREATE TABLE master_table_clean AS
+SELECT *,
+    TO_DATE(birthdate, 'MM/DD/YYYY') AS birthdate_clean,
+    TO_TIMESTAMP(usercreatedate, 'YYYY-MM-DD HH24:MI:SS') AS created_clean
+FROM master_table_nonulls;
+```
+
+---
+
+## 📊 Data Quality Results
+
+| Check | Result |
+|---|---|
+| Raw Records | 113,602 |
+| Cleaned Records | 51,108 |
+| Records Removed | 55,636 |
+| Duplicates Found | 20,572 enrollment IDs |
+| Null Values After Cleaning | 0 |
+| Foreign Key Violations | 0 |
+| Date Format Issues | Resolved ✅ |
+
+---
+
+## 📈 Dashboard Screenshots
+
+### Learner Analytics Dashboard
+![Learner Dashboard](visuals/learner_dashboard_screenshot.png)
+
+### Marketing Campaign Dashboard
+![Marketing Dashboard](visuals/marketing_dashboard_screenshot.png)
+
+---
+
+## 🔍 Key Insights Delivered
+- Identified dropout patterns across cohorts and regions
+- Mapped enrollment trends over time for strategic planning
+- Analyzed marketing campaign cost efficiency in AED
+- March Brand Awareness campaign had highest total results
+- Delivered actionable recommendations for learner retention
+
+---
+
+## 💡 Business Recommendations
+1. Focus retention efforts on cohorts with highest dropout rates
+2. Reallocate marketing budget toward cost-efficient campaigns
+3. Expand outreach in high-enrollment regions
+4. Standardize data collection to reduce null values in future
+
+---
+
+## 📂 Data Access
+> ⚠️ Raw datasets not included due to privacy and size constraints.
+> This project was completed as part of the Excelerate × SLU internship program.
+> Data was provided by Excelerate for educational purposes only.
+
+---
+
+## 📄 Reports
+- Week 2: Data Transformation & Master Table Creation Report
+- Week 3: Dashboard Design & Wireframing Report
+
+> Reports available in the `reports/` folder
+
+---
+
+## 👤 Author
+**Muhammad Tazeem Sajid**
+- 🔗 LinkedIn: `linkedin.com/in/muhammad-tazeem-sajid-2642622b1`
+- 💻 GitHub: `github.com/TazeemSajid`
+- 📧 Email: `tazeemsajid22@gmail.com`
